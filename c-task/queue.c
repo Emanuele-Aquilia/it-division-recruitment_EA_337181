@@ -1,6 +1,5 @@
 #include "queue.h"
 
-// Create a queue with a specific capacity
 Queue* create_queue(int size, GNSSParser_Data_t type) {
     Queue *q = (Queue*)malloc(sizeof(Queue));
     q->msg = (void**)malloc(capacity * sizeof(type));
@@ -10,7 +9,6 @@ Queue* create_queue(int size, GNSSParser_Data_t type) {
     return q;
 }
 
-// Destroy the queue and free allocated memory
 void destroy_queue(Queue *q) {
     q->msg = NULL;
     q = NULL;
@@ -18,7 +16,6 @@ void destroy_queue(Queue *q) {
     free(q);
 }
 
-// Enqueue: Add an element to the queue
 void enqueue(Queue *q, void *data) {
     if (q->size % q->cur_num == 0) {
         q->indx = 0;
