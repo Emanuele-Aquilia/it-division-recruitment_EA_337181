@@ -29,7 +29,15 @@ static GNSSParser_Data_t GNSSParser_Data;
 static uint32_t getValue() {
     
     /* USER CODE BEGIN 1 */     //Insert code if necessary
-    
+    uint8_t LSB;
+    LSB = rand() % 256;
+    return uint32_t(LSB); //return LSB; the conversion in C automaticaly ADD '0' to the left of the LSB to make it 32 bits.
+
+
+    //one other implementation of the function could be:
+    //uint32_t res = 0;
+    //res = res + LSB;
+    //return res;
     /* USER CODE END 1 */
 
 }
@@ -57,14 +65,26 @@ void task(void *args){
     /* USER CODE BEGIN 2 */     //Insert code if necessary
 
     /* Initialization of the Parser*/
-
+    if(GNSS_PARSER_Init(&GNSSParser_Data) != GNSS_PARSER_OK) {
+        printf("Error in GNSS_PARSER_Init\n");
+        return 1;
+    }
     /* USER CODE END 2 */
 
     while(1){
 
         value = getValue();
         /* USER CODE BEGIN WHILE */     //Insert code if necessary
-
+        if(value & 0x04) {
+            GNSS_PARSER_ParseMsg(&GNSSParser_Data, GPGGA);
+            GNSS_PARSER_Print(&GNSSParser_Data, GPGGA);
+        } else if(value & 0x02) {
+            GNSS_PARSER_CheckSanity(&GNSSParser_Data, GNS);
+            GNSS_PARSER_Print(&GNSSParser_Data, GNS);
+        } else if(value & 0x01) {
+            GNSS_PARSER_Print(&GNSSParser_Data, GPRMC);
+            GNSS_PARSER_Print(&GNSSParser_Data, GPRMC);
+        } 
 
         /* USER CODE END WHILE */
 
