@@ -5,6 +5,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "gnss_parser.h"
+#include "queue.h"
 
 void task(void *args);
 

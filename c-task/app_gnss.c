@@ -55,7 +55,9 @@ void task(void *args){
     uint32_t value;
 
     /* USER CODE BEGIN 1 */     //Insert code if necessary
-    
+    Queue *queue_gpgga = create_queue(10, GPGGA_Info_t);
+    Queue *queue_gns = create_queue(10, GNS_Info_t);
+    Queue *queue_gprmc = create_queue(10, GPRMC_Info_t);
 
     /* USER CODE END 1 */
 
@@ -76,14 +78,37 @@ void task(void *args){
         value = getValue();
         /* USER CODE BEGIN WHILE */     //Insert code if necessary
         if(value & 0x04) {
-            GNSS_PARSER_ParseMsg(&GNSSParser_Data, GPGGA);
-            GNSS_PARSER_Print(&GNSSParser_Data, GPGGA);
-        } else if(value & 0x02) {
-            GNSS_PARSER_CheckSanity(&GNSSParser_Data, GNS);
-            GNSS_PARSER_Print(&GNSSParser_Data, GNS);
-        } else if(value & 0x01) {
-            GNSS_PARSER_Print(&GNSSParser_Data, GPRMC);
-            GNSS_PARSER_Print(&GNSSParser_Data, GPRMC);
+            if(GNSS_PARSER_ParseMsg(&GNSSParser_Data, GPGGA) != GNSS_PARSER_OK) {
+                printf("Error in GNSS_PARSER_ParseMsg\n");
+            } else {
+            if(GNSS_PARSER_Print(&GNSSParser_Data, GPGGA) != GNSS_PARSER_OK) {
+                printf("Error in GNSS_PARSER_Print\n");
+                } else {
+                    enqueue(queue_gpgga, &GNSSParser_Data.gpgga_data);
+                }
+            }
+        } 
+        else if(value & 0x02) {
+            if(GNSS_PARSER_ParseMsg(&GNSSParser_Data, GNS) != GNSS_PARSER_OK) {
+                printf("Error in GNSS_PARSER_ParseMsg\n");
+            } else {
+            if(GNSS_PARSER_Print(&GNSSParser_Data, GNS) != GNSS_PARSER_OK) {
+                printf("Error in GNSS_PARSER_Print\n");
+                } else {
+                    enqueue(queue_gns, &GNSSParser_Data.gns_data);
+                }
+            }
+        } 
+        else if(value & 0x01) {
+            if(GNSS_PARSER_ParseMsg(&GNSSParser_Data, GPRMC) != GNSS_PARSER_OK) {
+                printf("Error in GNSS_PARSER_ParseMsg\n");
+            } else {
+            if(GNSS_PARSER_Print(&GNSSParser_Data, GPRMC != GNSS_PARSER_OK) {
+                printf("Error in GNSS_PARSER_Print\n");
+                } else {
+                    enqueue(queue_gprmc, &GNSSParser_Data.gprmc_data);
+                }
+            }
         } 
 
         /* USER CODE END WHILE */

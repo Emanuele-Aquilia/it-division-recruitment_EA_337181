@@ -8,4 +8,14 @@ For point 2 I developed 2 implementation, one which is commented, both gets the 
 
 ## Point 3 
 
-For point 3 we simply do some bitwise checks on value and we switch cases.
+For point 3 we simply do some bitwise checks on value and we switch cases, checking that the function called returned positive result, we do not stop the programm because it may have been a temporary malfunction, we can maybe implement a counter to check the count of errors and after a certain amount we stop the execution with a error message
+
+## Bonus
+
+After creating the queue.h, which contains the prototype of the three function needed and the struct, we implement them in the .c file --> the create takes the size of the queue and the data type allocating the memory needed, and initialize the index and the cur_num (current number of message in the queue), the destroy simply frees the memory after setting the pointers to NULL for security purpose (even tho seen the context it should not be necessary), the enqueue first check if the queue is "full" resetting the index and cur_num and after that enqueue the message.
+
+In the main we instantiate the 3 queue, and after eache message if the printing return positive execution then we save the message.
+
+## Comment 
+
+On the bonus task I had to read some documentation, because I didn't perfectly remember ADT.
